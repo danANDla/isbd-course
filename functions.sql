@@ -1,4 +1,4 @@
-/*Проверка можно ли добавить коктейль в заказ*/
+/*Добавить коктейль в заказ*/
 create or replace procedure add_item_to_order(p_id bigint, c_id bigint, u_id bigint) as $$
 declare
     mview record;

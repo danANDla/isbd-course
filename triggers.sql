@@ -1,4 +1,4 @@
-/* проверка есть ли коктейль в меню вечеринки*/
+/* Проверка есть ли коктейль в меню вечеринки */
 create or replace function check_cocktail_in_menu() returns trigger as $$
 begin
     if new.cocktail_id not in (select cocktail_id from menus where party_id = new.party_id)
@@ -13,7 +13,7 @@ create trigger a_check_cocktail_in_menu_trigger
     for each row
 execute procedure check_cocktail_in_menu();
 
-/*проерка наличия ингредиентов для коктейля*/
+/* Проверка наличия ингредиентов для коктейля */
 create or replace function check_ingredients_in_purchase() returns trigger as $$
 declare
     mview record;
@@ -74,7 +74,7 @@ create trigger b_check_ingredients_in_purchase_trigger
     for each row
 execute procedure check_ingredients_in_purchase();
 
-/* проверка приглашен ли пользователь */
+/* Проверка приглашен ли пользователь */
 create or replace function check_user_invited() returns trigger as $$
 begin
     if new.person_id not in (select person_id from invites where party_id = new.party_id)
@@ -89,7 +89,7 @@ create trigger check_user_invited_trigger
     for each row
 execute procedure check_user_invited();
 
-/*проверка есть ли продукт*/
+/* Проверка есть ли продукт */
 create or replace function check_product() returns trigger as $$
 begin
     if new.product_id not in(
@@ -106,7 +106,7 @@ create trigger check_product_trigger
     for each row
 execute procedure check_product();
 
-/*проверка обновленного значения*/
+/* Проверка обновленного количества */
 create or replace function check_quantity_update() returns trigger as $$
 declare
 remain real;
