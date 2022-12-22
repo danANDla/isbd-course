@@ -74,8 +74,6 @@ create trigger b_check_ingredients_in_purchase_trigger
     for each row
 execute procedure check_ingredients_in_purchase();
 
-
- 
 /* проверка приглашен ли пользователь */
 create or replace function check_user_invited() returns trigger as $$
 begin
@@ -90,3 +88,46 @@ create trigger check_user_invited_trigger
     before insert or update on orders
     for each row
 execute procedure check_user_invited();
+
+/*проверка есть ли продукт*/
+create or replace function check_product() returns trigger as $$
+begin
+    if new.product_id not in(
+        select id from products
+    )
+    then
+        RAISE EXCEPTION 'invalid product id';
+    end if;
+    return new;
+end;
+$$ language plpgsql;
+create trigger check_product_trigger
+    before insert or update on purchases
+    for each row
+execute procedure check_product();
+
+/*проверка обновленного значения*/
+create or replace function check_quantity_update() returns trigger as $$
+declare
+remain real;
+new_quantity real;
+begin
+    
+    select purchases.quantity from ingredients
+        join products on products.ingredient_id = ingredients.id
+        join purchases on purchases.product_id = products.id
+    where purchases.party_id = new.party_id and products.id = new.product_id into remain;
+
+    new_quantity := remain + new.quantity;
+    if new_quantity < 0
+    then
+        RAISE EXCEPTION 'new value of quantity can not be negative:';
+    end if;
+
+    return new;
+end;
+$$ language plpgsql;
+create trigger check_quantity_update_trigger
+    before insert or update on purchases
+    for each row
+execute procedure check_quantity_update();

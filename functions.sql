@@ -57,36 +57,21 @@ declare
 begin
     
     if prod_id not in(
-        select id from products
+        select product_id from purchases where purchases.party_id = p_id
     )
     then
-        RAISE NOTICE 'invalid product id';
-    else
-    
-        if prod_id not in(
-            select product_id from purchases where purchases.party_id = p_id
-        )
-        then
-            execute format('insert into purchases(party_id,product_id,quantity)
-                    values($1,$2,$3);') using p_id, prod_id, 0; 
-        end if;
-
-        select purchases.quantity from ingredients
-            join products on products.ingredient_id = ingredients.id
-            join purchases on purchases.product_id = products.id
-        where purchases.party_id = p_id and products.id = prod_id into remain;
-
-        new_quantity := remain + quantity;
-        if new_quantity < 0
-        then
-            RAISE NOTICE 'new value of quantity can not be negative:';
-            RAISE NOTICE 'product[%] % + (%) = %',
-            prod_id, remain, quantity, new_quantity;
-        else
-            execute format('update purchases set quantity = $2 where product_id = $1 and party_id = $3;')
-                using prod_id, new_quantity, p_id; 
-        end if;
-
+        execute format('insert into purchases(party_id,product_id,quantity)
+                values($1,$2,$3);') using p_id, prod_id, 0; 
     end if;
+
+    select purchases.quantity from ingredients
+        join products on products.ingredient_id = ingredients.id
+        join purchases on purchases.product_id = products.id
+    where purchases.party_id = p_id and products.id = prod_id into remain;
+
+    new_quantity := remain + quantity;
+    execute format('update purchases set quantity = $2 where product_id = $1 and party_id = $3;')
+        using prod_id, new_quantity, p_id; 
+
 end;
 $$ language plpgsql;
