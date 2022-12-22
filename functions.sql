@@ -4,17 +4,17 @@ declare
     mview record;
     remain real;
     new_quantity real;
-    result integer;
     price real;
     c_name text;
     prod record;
     order_id bigint;
 begin
-    execute format('insert into orders(name,price,party_id,person_id,cocktail_id)
-            values($1,$2,$3,$4,$5);') using c_name, 0, p_id,u_id,c_id; 
-    SELECT LAST_INSERT_ID() into order_id;
+    price := 0;
 
     select cocktails.name from cocktails where cocktails.id = c_id into c_name;
+    execute format('insert into orders(name,price,party_id,person_id,cocktail_id)
+            values($1,$2,$3,$4,$5) returning id;') into order_id using c_name, 0, p_id,u_id,c_id; 
+
     for mview in 
         select cocktails.name as cocktail, ingredients.name as ingredient, recipes.quantity as quantity, ingredients.id as ingr_id from ingredients
             JOIN recipes on recipes.ingredient_id = ingredients.id
@@ -45,7 +45,6 @@ begin
     RAISE NOTICE 'price = %', price;
     execute format('update orders set price = $2 where orders.id = $1;')
         using order_id, price; 
-    -- return result;
 end;
 $$ language plpgsql;
 
