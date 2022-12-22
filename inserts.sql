@@ -22,7 +22,8 @@ values(1, 'Barcelo blanco', 1.279),
 (8, 'Простоквашино', 0.397),
 (9, 'Richeza', 1.058),
 (10, 'Rich', 0.183),
-(11, 'Monin Triple Sec', 2.413);
+(11, 'Monin Triple Sec', 2.413),
+(1, 'Cointreau', 1.927);
 
 insert into cocktail_types(name)
 values('sour'),
