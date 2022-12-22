@@ -69,3 +69,9 @@ values('Dora'),
 ('Tyoma'),
 ('Julia'),
 ('Danya');
+
+insert into menus(party_id, cocktail_id)
+values(1,1);
+
+insert into invites(person_id, party_id)
+values(1,1);
