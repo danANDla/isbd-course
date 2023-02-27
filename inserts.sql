@@ -11,6 +11,14 @@ values('белый ром'),
 ('ананасовый сок'),
 ('апельсиновый ликёр');
 
+insert into ingredient_types(name)
+values ('spirits'),
+('juices'),
+('drinks'),
+('produce'),
+('syrups'),
+('undef');
+
 insert into products(ingredient_id, name, price)
 values(1, 'Barcelo blanco', 1.279),
 (2, 'homemade', 0.224),
@@ -26,7 +34,20 @@ values(1, 'Barcelo blanco', 1.279),
 (1, 'Cointreau', 1.927);
 
 insert into cocktail_types(name)
-values('sour'),
+values ('Ancestrals'),
+('Sours'),
+('Spirit-Forward Cocktails'),
+('Duos and Trios'),
+('Champagne Cocktails'),
+('Highballs, Collinses, and Fizzes'),
+('Juleps and Smashes'),
+('Hot Drinks'),
+('Flips and Nogs'),
+('Pousse Family'),
+('Tropical-Style Drinks'),
+('Punch'),
+('Old (and Odd) Birds'),
+('sour'),
 ('tiki');
 
 insert into cocktails(name, type_id)

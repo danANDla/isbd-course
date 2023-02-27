@@ -1,9 +1,19 @@
+create table ingredient_types(
+    id serial primary key,
+    name varchar(50) not null,
+);
+
 /* ingredients
-   */
+*/
 create table ingredients(
     id serial primary key,
     name varchar(50) not null,
-    description text
+    description text,
+    type serial,
+    constraint FK_ingredient_types 
+        foreign key(type)
+            references ingredient_types(id)
+            on delete set null,
 );
 
 /* products

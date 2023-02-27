@@ -43,7 +43,7 @@ begin
                 join purchases on purchases.product_id = products.id
             where purchases.party_id = new.party_id and products.ingredient_id = mview.ingr_id order by purchases.quantity desc limit 1 into remain;
 
-            new_quantity:= remain - mview.quantity;
+            new_quantity:= remain;
             if new_quantity < 0
             then
                 RAISE NOTICE '[%] ~ % %',
